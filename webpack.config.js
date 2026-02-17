@@ -17,9 +17,9 @@ if (buildTarget == 'app') {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/app/index.html',
-      title: 'Notic',
+      title: 'noteit',
       rootUrl: '/',
-    })
+    }),
   );
 }
 
@@ -27,9 +27,11 @@ module.exports = {
   plugins,
   entry:
     buildTarget === 'package'
-      ? './src/package/index.js'
-      : ['./src/app/index.js'],
-
+      ? './src/package/index.ts'
+      : ['./src/app/index.ts'],
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   output: {
     path: path.join(
       ROOT_DIR,
@@ -37,7 +39,7 @@ module.exports = {
         ? buildType === 'umd'
           ? '/dist'
           : '/package'
-        : '/docs'
+        : '/docs',
     ),
     filename: 'bundle.js',
     libraryTarget: buildType,
@@ -54,11 +56,15 @@ module.exports = {
         },
       },
       {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: ['babel-loader', 'ts-loader'],
+      },
+      {
         test: /\.(s[ac]|c)ss$/i,
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader',
           {
             loader: 'postcss-loader',
             options: {

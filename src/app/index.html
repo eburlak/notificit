@@ -5,21 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <script>
-      const APP_CONFIG = JSON.parse(
-        '<%= htmlWebpackPlugin.options.APP_CONFIG %>'
-      );
-    </script>
   </head>
 
   <body>
     <div class="buttons">
-      <button data-notic-type="loading-on">Loader on</button>
-      <button data-notic-type="loading-off">Loader off</button>
-      <button data-notic-message="Info message" data-notic-delay="3000">Add info message, hide after 3s</button>
-        <button data-notic-message="Error message" data-notic-type="error">Add error message</button>
-      <button data-notic-message="Success message" data-notic-type="success">Add success message</button>
-      <button data-notic-clear>Clear queue</button>
+      <button data-noteit-type="loading-on">Loader on</button>
+      <button data-noteit-type="loading-off">Loader off</button>
+      <button data-noteit-message="Info message" data-noteit-delay="3000">Add info message, hide after 3s</button>
+        <button data-noteit-message="Error message" data-noteit-type="error">Add error message</button>
+      <button data-noteit-message="Success message" data-noteit-type="success">Add success message</button>
+      <button data-noteit-clear>Clear queue</button>
     </div>
   </body>
   <!-- Global site tag (gtag.js) - Google Analytics -->

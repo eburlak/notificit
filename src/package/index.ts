@@ -1,16 +1,47 @@
-import './index.scss';
+import './style.css';
 
-const getStyle = function (elem, rule) {
-  var result = '';
+type TMessage = {
+  type: string;
+  message?: string;
+  autoWidth?: boolean;
+  delay?: number;
+  onClick?: (message: TMessage) => void;
+  id?: number;
+  dom?: HTMLDivElement;
+  height?: number;
+  visibleHeight?: number;
+  timeout?: ReturnType<typeof setTimeout>;
+};
+
+type TProps = {
+  animation?: {
+    time?: number;
+  };
+  classNames?: Record<string, string[]>;
+  close?: {
+    button: boolean;
+    area: boolean;
+  };
+};
+
+type TState = {
+  loading: boolean;
+  messages: {
+    list: TMessage[];
+  };
+};
+
+const getStyle = function (element: HTMLElement, rule: string): string {
+  let result = '';
   if (document.defaultView && document.defaultView.getComputedStyle) {
     result = document.defaultView
-      .getComputedStyle(elem, '')
+      .getComputedStyle(element, '')
       .getPropertyValue(rule);
-  } else if (elem.currentStyle) {
-    rule = rule.replace(/\-(\w)/g, function (strMatch, p1) {
+  } else if ((element as any).currentStyle) {
+    rule = rule.replace(/\-(\w)/g, function (strMatch: string, p1: string) {
       return p1.toUpperCase();
     });
-    result = elem.currentStyle[rule];
+    result = (element as any).currentStyle[rule];
   }
   return result;
 };
@@ -27,141 +58,190 @@ const icons = {
     '<svg viewBox="0 0 40 40" stroke="currentColor"><path d="M10,10 L30,30 M30,10 L10,30"></path></svg>',
 };
 
-export default class Notic {
-  constructor(props = {}) {
+export default class Noteit {
+  private animation: TProps['animation'];
+  private classNames: TProps['classNames'];
+  private close: TProps['close'];
+  private types = {
+    default: 'info',
+    list: {
+      loading: {
+        icon: icons.loading,
+      },
+      success: {
+        icon: icons.success,
+      },
+      error: {
+        icon: icons.error,
+      },
+      info: {
+        icon: icons.info,
+      },
+    },
+  };
+  private state: TState = {
+    loading: false,
+    messages: {
+      list: [],
+    },
+  };
+  private rootDOM: HTMLDivElement | null = null;
+  private loadingDom!: HTMLDivElement;
+  private loaderTimeout?: ReturnType<typeof setTimeout>;
+
+  constructor(props: TProps = {}) {
     this.animation = props.animation || { time: 300 };
 
     this.classNames = {
-      container: ['notic'],
+      container: ['noteit'],
     };
-    Object.keys(props.classNames || {}).forEach((key) => {
-      this.classNames[key] = [
-        ...(this.classNames[key] || []),
-        ...props.classNames[key],
-      ];
-    });
+
+    if (props.classNames) {
+      Object.keys(props.classNames).forEach((key) => {
+        this.classNames[key] = [
+          ...(this.classNames[key] || []),
+          ...(props.classNames?.[key] || []),
+        ];
+      });
+    }
 
     this.close = props.close || {
       button: true,
       area: true,
     };
 
-    this.types = {
-      default: 'info',
-      list: {
-        loading: {
-          icon: icons.loading,
-        },
-        success: {
-          icon: icons.success,
-        },
-        error: {
-          icon: icons.error,
-        },
-        info: {
-          icon: icons.info,
-        },
-      },
-    };
-
-    this.state = {
-      loading: false,
-      messages: {
-        list: [],
-      },
-    };
-
-    this.rootDOM = null;
-
     this.init();
   }
-  setTransition(elem, time = this.animation.time) {
-    if (!elem) return;
-    elem.style.transition = 'all ' + time / 1000 + 's';
-    elem.style.webkitTransition = 'all ' + time / 1000 + 's';
+
+  private setTransition(
+    element: HTMLElement,
+    time: number = this.animation.time,
+  ): void {
+    if (!element) {
+      return;
+    }
+
+    element.style.transition = 'all ' + time / 1000 + 's';
   }
-  build() {
-    let { types, classNames } = this;
+
+  private build(): void {
+    const { classNames } = this;
     this.rootDOM = document.createElement('div');
-    classNames.container.forEach((className) => {
-      this.rootDOM.classList.add(className);
-    });
+
+    if (classNames.container) {
+      classNames.container.forEach((className) => {
+        this.rootDOM!.classList.add(className);
+      });
+    }
+
     this.setTransition(this.rootDOM);
+
     this.loadingDom = document.createElement('div');
-    this.loadingDom.classList.add('notic__loading');
-    this.loadingDom.innerHTML = types.list['loading'].icon;
+    this.loadingDom.classList.add('noteit__loading');
+    this.loadingDom.innerHTML = this.types.list['loading'].icon;
     this.setTransition(this.loadingDom);
     this.rootDOM.appendChild(this.loadingDom);
     document.body.appendChild(this.rootDOM);
   }
-  destroy() {
-    if (this.rootDOM) {
+
+  private destroy(): void {
+    if (this.rootDOM && this.rootDOM.parentNode) {
       this.rootDOM.parentNode.removeChild(this.rootDOM);
     }
   }
-  init() {
+
+  private init(): void {
     this.destroy();
     this.build();
   }
-  addMessage(message) {
-    let { types } = this,
-      { messages } = this.state;
+
+  public addMessage(message: TMessage): void {
+    const { messages } = this.state;
     messages.list.push(message);
     this.buildMessage(message);
   }
-  buildMessage(message) {
+
+  private buildMessage(message: TMessage): void {
     if (!message) return;
-    let { rootDOM, types } = this,
-      messageDom = document.createElement('div'),
-      messageDomInner = document.createElement('div'),
-      messageDomInnerIcon = document.createElement('div'),
-      messageDomInnerButton = document.createElement('div'),
-      messageDomInnerText = document.createElement('div');
+
+    const { rootDOM, types } = this;
+
+    if (!rootDOM) return;
+
+    const messageDom = document.createElement('div');
+    const messageDomInner = document.createElement('div');
+    const messageDomInnerIcon = document.createElement('div');
+    const messageDomInnerButton = document.createElement('div');
+    const messageDomInnerText = document.createElement('div');
+
     message.type = types.list[message.type] ? message.type : types.default;
     message.id = +new Date();
-    messageDom.classList.add('notic__message');
-    if (message.autoWidth)
-      messageDom.classList.add('notic__message--auto-width');
-    messageDom.classList.add('notic__message--' + message.type);
-    if (!message.message) messageDom.classList.add('notic__message--empty');
-    messageDomInner.classList.add('notic__message__inner');
-    messageDomInnerIcon.classList.add('notic__message__icon');
-    messageDomInnerText.classList.add('notic__message__text');
+
+    messageDom.classList.add('noteit__message');
+    if (message.autoWidth) {
+      messageDom.classList.add('noteit__message--auto-width');
+    }
+    messageDom.classList.add('noteit__message--' + message.type);
+    if (!message.message) {
+      messageDom.classList.add('noteit__message--empty');
+    }
+
+    messageDomInner.classList.add('noteit__message__inner');
+    messageDomInnerIcon.classList.add('noteit__message__icon');
+    messageDomInnerText.classList.add('noteit__message__text');
+
     messageDomInnerIcon.innerHTML = types.list[message.type].icon;
-    messageDomInnerText.innerHTML = message.message;
+    messageDomInnerText.innerHTML = message.message || '';
+
     messageDomInner.appendChild(messageDomInnerIcon);
     messageDomInner.appendChild(messageDomInnerText);
+
     if (this.close.button) {
-      messageDomInner.classList.add('notic__message__inner--with-button');
-      messageDomInnerButton.classList.add('notic__message__close');
+      messageDomInner.classList.add('noteit__message__inner--with-button');
+      messageDomInnerButton.classList.add('noteit__message__close');
       messageDomInnerButton.innerHTML = icons.close;
       messageDomInnerButton.onclick = () => {
         this.hideMessage(message);
       };
       messageDomInner.appendChild(messageDomInnerButton);
     }
+
     messageDom.appendChild(messageDomInner);
     this.setTransition(messageDom);
+
     message.dom = messageDom;
     rootDOM.appendChild(message.dom);
+
     message.height = 0;
     message.visibleHeight =
-      parseFloat(messageDomInner.clientHeight) +
+      parseFloat(messageDomInner.clientHeight.toString()) +
       parseFloat(getStyle(messageDomInner, 'margin-top').replace('px', '')) +
       parseFloat(getStyle(messageDomInner, 'margin-bottom').replace('px', ''));
-    message.dom.style.height = message.height;
-    if (this.close.area)
+
+    message.dom.style.height = message.height + 'px';
+
+    if (this.close.area) {
       message.dom.onclick = () => {
-        message.onClick && message.onClick(message);
+        if (message.onClick) {
+          message.onClick(message);
+        }
         this.hideMessage(message);
       };
+    }
+
     this.showMessage(message);
   }
-  showMessage(message) {
+
+  private showMessage(message: TMessage): void {
     setTimeout(() => {
+      if (!message.dom) {
+        return;
+      }
+
       message.height = message.visibleHeight;
       message.dom.style.height = message.height + 'px';
-      message.dom.classList.add('notic__message--visible');
+      message.dom.classList.add('noteit__message--visible');
+
       if (message.delay) {
         message.timeout = setTimeout(() => {
           this.hideMessage(message);
@@ -169,51 +249,76 @@ export default class Notic {
       }
     }, 50);
   }
-  hideMessages() {
-    let { messages } = this.state;
+
+  public hideMessages(): void {
+    const { messages } = this.state;
     messages.list.forEach((message, index) => {
       setTimeout(() => {
         this.hideMessage(message);
       }, index * this.animation.time);
     });
   }
-  hideMessage(message) {
+
+  private hideMessage(message: TMessage): void {
     if (!message.dom) return;
+
     clearTimeout(message.timeout);
-    message.dom.classList.remove('notic__message--visible');
-    message.dom.style.height = 0;
+    message.dom.classList.remove('noteit__message--visible');
+    message.dom.style.height = '0';
+
     setTimeout(() => {
       this.removeMessage(message);
     }, this.animation.time);
   }
-  removeMessage(message) {
-    let { messages } = this.state,
-      index = messages.list.findIndex((item) => {
-        return item.id === message.id;
-      });
-    messages.list.splice(index, 1);
-    message.dom && message.dom.parentNode.removeChild(message.dom);
+
+  private removeMessage(message: TMessage): void {
+    const { messages } = this.state;
+    const index = messages.list.findIndex((item) => {
+      return item.id === message.id;
+    });
+
+    if (index !== -1) {
+      messages.list.splice(index, 1);
+    }
+
+    if (message.dom && message.dom.parentNode) {
+      message.dom.parentNode.removeChild(message.dom);
+    }
+
     message.dom = null;
   }
-  loadingOn() {
+
+  public loadingOn(): void {
     if (this.state.loading) return;
+
     clearTimeout(this.loaderTimeout);
     this.state.loading = true;
-    this.rootDOM.classList.add('notic--loading');
+
+    if (this.rootDOM) {
+      this.rootDOM.classList.add('noteit--loading');
+    }
+
     this.loaderTimeout = setTimeout(() => {
-      this.loadingDom.classList.add('notic__loading--show');
+      this.loadingDom.classList.add('noteit__loading--show');
     }, this.animation.time);
   }
-  loadingOff() {
+
+  public loadingOff(): void {
     if (!this.state.loading) return;
+
     clearTimeout(this.loaderTimeout);
     this.state.loading = false;
-    this.loadingDom.classList.remove('notic__loading--show');
+
+    this.loadingDom.classList.remove('noteit__loading--show');
+
     this.loaderTimeout = setTimeout(() => {
-      this.rootDOM.classList.remove('notic--loading');
+      if (this.rootDOM) {
+        this.rootDOM.classList.remove('noteit--loading');
+      }
     }, this.animation.time);
   }
-  clear() {
+
+  public clear(): void {
     this.loadingOff();
     this.hideMessages();
   }

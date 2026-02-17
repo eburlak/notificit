@@ -1,25 +1,6 @@
 {
-  "name": "notic",
-  "version": "3.0.05",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/burlakeugene/notic.git"
-  },
-  "keywords": [
-    "notification",
-    "messages",
-    "notice",
-    "loader",
-    "preloader"
-  ],
-  "bugs": {
-    "url": "https://github.com/burlakeugene/notic/issues"
-  },
-  "homepage": "https://burlakeugene.github.io/notic/",
-  "main": "package/bundle.js",
-  "author": "Eugene Burlak <burlakeugene@gmail.com>",
-  "license": "MIT",
-  "description": "",
+  "name": "noteit",
+  "version": "4.0.0",
   "scripts": {
     "dev": "webpack serve --mode=development",
     "build_app": "BUILD_TARGET='app' BUILD_TYPE='umd' webpack --mode=production",
@@ -28,6 +9,14 @@
     "build_package": "npm run build_package_commonjs2 && npm run build_package_dist",
     "build": "npm run build_app && npm run build_package"
   },
+  "keywords": [],
+  "author": "Evgeniy Burlak <e.brlk@ya.ru>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eburlak/noteit.git"
+  },
+  "main": "package/bundle.js",
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
@@ -45,6 +34,14 @@
     "style-loader": "^3.3.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.15.1"
-  }
+    "webpack-dev-server": "^4.15.1",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6"
+  },
+  "bugs": {
+    "url": "https://github.com/eburlak/noteit/issues"
+  },
+  "homepage": "https://github.com/eburlak/noteit#readme",
+  "dependencies": {},
+  "description": ""
 }
