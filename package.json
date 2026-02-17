@@ -1,6 +1,6 @@
 {
-  "name": "noteit",
-  "version": "4.0.0",
+  "name": "notificit",
+  "version": "1.0.0",
   "scripts": {
     "dev": "webpack serve --mode=development",
     "build_app": "BUILD_TARGET='app' BUILD_TYPE='umd' webpack --mode=production",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eburlak/noteit.git"
+    "url": "git+https://github.com/eburlak/notificit.git"
   },
   "main": "package/bundle.js",
   "devDependencies": {
@@ -39,9 +39,9 @@
     "typescript": "^5.1.6"
   },
   "bugs": {
-    "url": "https://github.com/eburlak/noteit/issues"
+    "url": "https://github.com/eburlak/notificit/issues"
   },
-  "homepage": "https://github.com/eburlak/noteit#readme",
+  "homepage": "https://github.com/eburlak/notificit#readme",
   "dependencies": {},
   "description": ""
 }

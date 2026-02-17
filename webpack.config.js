@@ -17,7 +17,7 @@ if (buildTarget == 'app') {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/app/index.html',
-      title: 'noteit',
+      title: 'notificit',
       rootUrl: '/',
     }),
   );

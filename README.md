@@ -1,16 +1,16 @@
 
-## Noteit
+## notificit
 
 Demo:
-[eburlak.github.io/noteit](https://eburlak.github.io/noteit)
+[eburlak.github.io/notificit](https://eburlak.github.io/notificit)
 
 Usage:
 ```
-npm i noteit
+npm i notificit
 
-import Noteit from 'noteit';
+import notificit from 'notificit';
 
-const Notifications = new Noteit({
+const Notifications = new notificit({
   close: {
     button: true,
     area: true,
@@ -19,7 +19,7 @@ const Notifications = new Noteit({
     time: 300
   },
   classNames: {
-    container: ['noteit']
+    container: ['notificit']
   }
 });
 

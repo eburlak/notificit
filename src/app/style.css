@@ -43,9 +43,9 @@ button {
   font-size: 18px;
 }
 
-[data-noteit-type='error'] {
+[data-notificit-type='error'] {
   background: #e74b43;
 }
-[data-noteit-type='success'] {
+[data-notificit-type='success'] {
   background: #27ca5d;
 }

@@ -58,7 +58,7 @@ const icons = {
     '<svg viewBox="0 0 40 40" stroke="currentColor"><path d="M10,10 L30,30 M30,10 L10,30"></path></svg>',
 };
 
-export default class Noteit {
+export default class notificit {
   private animation: TProps['animation'];
   private classNames: TProps['classNames'];
   private close: TProps['close'];
@@ -93,7 +93,7 @@ export default class Noteit {
     this.animation = props.animation || { time: 300 };
 
     this.classNames = {
-      container: ['noteit'],
+      container: ['notificit'],
     };
 
     if (props.classNames) {
@@ -137,7 +137,7 @@ export default class Noteit {
     this.setTransition(this.rootDOM);
 
     this.loadingDom = document.createElement('div');
-    this.loadingDom.classList.add('noteit__loading');
+    this.loadingDom.classList.add('notificit__loading');
     this.loadingDom.innerHTML = this.types.list['loading'].icon;
     this.setTransition(this.loadingDom);
     this.rootDOM.appendChild(this.loadingDom);
@@ -177,18 +177,18 @@ export default class Noteit {
     message.type = types.list[message.type] ? message.type : types.default;
     message.id = +new Date();
 
-    messageDom.classList.add('noteit__message');
+    messageDom.classList.add('notificit__message');
     if (message.autoWidth) {
-      messageDom.classList.add('noteit__message--auto-width');
+      messageDom.classList.add('notificit__message--auto-width');
     }
-    messageDom.classList.add('noteit__message--' + message.type);
+    messageDom.classList.add('notificit__message--' + message.type);
     if (!message.message) {
-      messageDom.classList.add('noteit__message--empty');
+      messageDom.classList.add('notificit__message--empty');
     }
 
-    messageDomInner.classList.add('noteit__message__inner');
-    messageDomInnerIcon.classList.add('noteit__message__icon');
-    messageDomInnerText.classList.add('noteit__message__text');
+    messageDomInner.classList.add('notificit__message__inner');
+    messageDomInnerIcon.classList.add('notificit__message__icon');
+    messageDomInnerText.classList.add('notificit__message__text');
 
     messageDomInnerIcon.innerHTML = types.list[message.type].icon;
     messageDomInnerText.innerHTML = message.message || '';
@@ -197,8 +197,8 @@ export default class Noteit {
     messageDomInner.appendChild(messageDomInnerText);
 
     if (this.close.button) {
-      messageDomInner.classList.add('noteit__message__inner--with-button');
-      messageDomInnerButton.classList.add('noteit__message__close');
+      messageDomInner.classList.add('notificit__message__inner--with-button');
+      messageDomInnerButton.classList.add('notificit__message__close');
       messageDomInnerButton.innerHTML = icons.close;
       messageDomInnerButton.onclick = () => {
         this.hideMessage(message);
@@ -240,7 +240,7 @@ export default class Noteit {
 
       message.height = message.visibleHeight;
       message.dom.style.height = message.height + 'px';
-      message.dom.classList.add('noteit__message--visible');
+      message.dom.classList.add('notificit__message--visible');
 
       if (message.delay) {
         message.timeout = setTimeout(() => {
@@ -263,7 +263,7 @@ export default class Noteit {
     if (!message.dom) return;
 
     clearTimeout(message.timeout);
-    message.dom.classList.remove('noteit__message--visible');
+    message.dom.classList.remove('notificit__message--visible');
     message.dom.style.height = '0';
 
     setTimeout(() => {
@@ -295,11 +295,11 @@ export default class Noteit {
     this.state.loading = true;
 
     if (this.rootDOM) {
-      this.rootDOM.classList.add('noteit--loading');
+      this.rootDOM.classList.add('notificit--loading');
     }
 
     this.loaderTimeout = setTimeout(() => {
-      this.loadingDom.classList.add('noteit__loading--show');
+      this.loadingDom.classList.add('notificit__loading--show');
     }, this.animation.time);
   }
 
@@ -309,11 +309,11 @@ export default class Noteit {
     clearTimeout(this.loaderTimeout);
     this.state.loading = false;
 
-    this.loadingDom.classList.remove('noteit__loading--show');
+    this.loadingDom.classList.remove('notificit__loading--show');
 
     this.loaderTimeout = setTimeout(() => {
       if (this.rootDOM) {
-        this.rootDOM.classList.remove('noteit--loading');
+        this.rootDOM.classList.remove('notificit--loading');
       }
     }, this.animation.time);
   }

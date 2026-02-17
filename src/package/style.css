@@ -1,9 +1,9 @@
-.noteit,
-.noteit * {
+.notificit,
+.notificit * {
   box-sizing: border-box;
 }
 
-.noteit {
+.notificit {
   --background: #fff;
   --green: #27ca5d;
   --red: #e74b43;
@@ -19,11 +19,11 @@
   pointer-events: none;
 }
 
-.noteit--loading {
+.notificit--loading {
   padding-right: 50px;
 }
 
-.noteit__loading {
+.notificit__loading {
   pointer-events: all;
   position: absolute;
   bottom: 10px;
@@ -38,11 +38,11 @@
   stroke-width: 5px;
 }
 
-.noteit__loading--show {
+.notificit__loading--show {
   transform: translateY(0);
 }
 
-.noteit__message {
+.notificit__message {
   pointer-events: all;
   width: var(--width);
   will-change: height;
@@ -55,11 +55,11 @@
   --icon-color: var(--color);
 }
 
-.noteit__message--auto-width {
+.notificit__message--auto-width {
   width: auto;
 }
 
-.noteit__message__inner {
+.notificit__message__inner {
   position: relative;
   min-height: 40px;
   min-width: 40px;
@@ -74,7 +74,7 @@
   align-items: center;
 }
 
-.noteit__message__icon {
+.notificit__message__icon {
   width: 30px;
   height: 30px;
   flex-shrink: 0;
@@ -82,26 +82,26 @@
   align-self: flex-start;
 }
 
-.noteit__message--success {
+.notificit__message--success {
   --icon-color: var(--green);
 }
 
-.noteit__message--error {
+.notificit__message--error {
   --icon-color: var(--red);
 }
 
-.noteit__message--info {
+.notificit__message--info {
   --icon-color: var(--blue);
 }
 
-.noteit__message__close {
+.notificit__message__close {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
   stroke-width: 2px;
 }
 
-.noteit__message__text {
+.notificit__message__text {
   flex: 1;
   align-self: center;
 }
