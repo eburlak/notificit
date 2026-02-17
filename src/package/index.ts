@@ -58,7 +58,7 @@ const icons = {
     '<svg viewBox="0 0 40 40" stroke="currentColor"><path d="M10,10 L30,30 M30,10 L10,30"></path></svg>',
 };
 
-export default class notificit {
+class Notificit {
   private animation: TProps['animation'];
   private classNames: TProps['classNames'];
   private close: TProps['close'];
@@ -323,3 +323,8 @@ export default class notificit {
     this.hideMessages();
   }
 }
+
+//@ts-expect-error: ok
+window.Notificit = Notificit;
+
+export default Notificit;
