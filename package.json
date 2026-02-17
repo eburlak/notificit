@@ -1,6 +1,6 @@
 {
   "name": "notificit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "webpack serve --mode=development",
     "build_app": "BUILD_TARGET='app' BUILD_TYPE='umd' webpack --mode=production",

@@ -8,9 +8,9 @@ Usage:
 ```
 npm i notificit
 
-import notificit from 'notificit';
+import Notificit from 'notificit';
 
-const Notifications = new notificit({
+const Notifications = new Notificit({
   close: {
     button: true,
     area: true,
