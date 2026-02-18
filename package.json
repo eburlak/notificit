@@ -1,6 +1,6 @@
 {
   "name": "notificit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scripts": {
     "dev": "webpack serve --mode=development",
     "build_app": "BUILD_TARGET='app' BUILD_TYPE='umd' webpack --mode=production",
@@ -9,7 +9,7 @@
     "build_package": "npm run build_package_commonjs2 && npm run build_package_dist",
     "build": "npm run build_app && npm run build_package"
   },
-  "keywords": ["notfication", "notify"],
+  "keywords": ["notification", "notifications", "notify", "notice", "message", "toast", "toaster"],
   "author": "Evgeniy Burlak <e.brlk@ya.ru>",
   "license": "MIT",
   "repository": {
